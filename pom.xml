@@ -1,18 +1,108 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.terracotta</groupId>
-  <artifactId>tc-pipes</artifactId>
-  <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>tc-pipes</name>
-  <url>http://maven.apache.org</url>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.terracotta</groupId>
+    <artifactId>tc-pipes</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>tc-pipes</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <java-version>1.5</java-version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.terracotta.modules</groupId>
+            <artifactId>tim-pipes</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.terracotta.modules</groupId>
+            <artifactId>tim-masterworker</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring</artifactId>
+            <version>2.5.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.6</version>
+        </dependency>
+
+<!--
+        <dependency>
+            <groupId>org.terracotta.modules</groupId>
+            <artifactId>jmx-util</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+-->
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.terracotta.maven.plugins</groupId>
+                <artifactId>tc-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <configuration>
+                    <workingDirectory>${project.build.directory}</workingDirectory>
+
+                    <activeNodes>node1,node2,node3,sheduler</activeNodes>
+                    <processes>
+                        <process nodeName="node1"
+                                 className="org.terracotta.Consumer" count="1"
+                                 jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node1 -Dtc.node-name=node1"/>
+                        <process nodeName="node2"
+                                 className="org.terracotta.Consumer" count="1"
+                                 jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node2 -Dtc.node-name=node2"/>
+                        <process nodeName="node3"
+                                 className="org.terracotta.Consumer" count="1"
+                                 jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node3  -Dtc.node-name=node3"/>
+                        <process nodeName="sheduler"
+                                 className="org.terracotta.Sender -Dtc.node-name=sheduler" count="1"
+                                 jvmargs="-Xmx30m"/>
+                    </processes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>terracotta-snapshots</id>
+            <url>http://www.terracotta.org/download/reflector/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
