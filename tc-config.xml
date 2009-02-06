@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tc:tc-config xmlns:tc="http://www.terracotta.org/config"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.terracottatech.com/config ">
+
+    <servers>
+        <server host="%i" name="org.terracotta.modules.sample-hostname"/>
+        <update-check>
+            <enabled>true</enabled>
+        </update-check>
+    </servers>
+
+    <clients>
+        <modules>
+            <module name="tim-masterworker" version="1.2.0" group-id="org.terracotta.modules"/>
+        </modules>
+        <logs>%(user.home)/terracotta/client-logs/org.terracotta.modules.sample/%D</logs>
+    </clients>
+
+    <application>
+        <dso>
+            <instrumented-classes>
+                <include>
+                    <class-expression>org.terracota.Consumer</class-expression>
+                </include>
+            </instrumented-classes>
+
+            <locks>
+                <autolock>
+                    <method-expression>* ...*(..)</method-expression>
+                    <lock-level>write</lock-level>
+                </autolock>
+            </locks>
+        </dso>
+    </application>
+</tc:tc-config>
