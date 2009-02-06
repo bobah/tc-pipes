@@ -26,17 +26,21 @@
             <version>1.2.0</version>
         </dependency>
 
+<!--
         <dependency>
             <groupId>org.terracotta.modules</groupId>
             <artifactId>tim-masterworker</artifactId>
             <version>1.2.0</version>
         </dependency>
+-->
 
+<!--
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring</artifactId>
             <version>2.5.6</version>
         </dependency>
+-->
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -44,13 +48,11 @@
             <version>1.5.6</version>
         </dependency>
 
-<!--
         <dependency>
             <groupId>org.terracotta.modules</groupId>
             <artifactId>jmx-util</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
--->
 
     </dependencies>
 
@@ -63,20 +65,14 @@
                 <configuration>
                     <workingDirectory>${project.build.directory}</workingDirectory>
 
-                    <activeNodes>node1,node2,node3,sheduler</activeNodes>
+                    <activeNodes>node1,subscriber</activeNodes>
                     <processes>
                         <process nodeName="node1"
                                  className="org.terracotta.Consumer" count="1"
                                  jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node1 -Dtc.node-name=node1"/>
                         <process nodeName="node2"
-                                 className="org.terracotta.Consumer" count="1"
+                                 className="org.terracotta.Subscriber" count="1"
                                  jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node2 -Dtc.node-name=node2"/>
-                        <process nodeName="node3"
-                                 className="org.terracotta.Consumer" count="1"
-                                 jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node3  -Dtc.node-name=node3"/>
-                        <process nodeName="sheduler"
-                                 className="org.terracotta.Sender -Dtc.node-name=sheduler" count="1"
-                                 jvmargs="-Xmx30m"/>
                     </processes>
                 </configuration>
             </plugin>
