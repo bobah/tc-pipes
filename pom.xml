@@ -34,8 +34,8 @@
 
         <dependency>
             <groupId>org.terracotta.modules</groupId>
-            <artifactId>jmx-util</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <artifactId>tim-masterworker</artifactId>
+            <version>1.2.0</version>
         </dependency>
 
     </dependencies>

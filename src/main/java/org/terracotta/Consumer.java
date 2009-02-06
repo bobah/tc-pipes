@@ -5,19 +5,10 @@ import org.terracotta.message.pipe.BlockingQueueBasedPipe;
 import org.terracotta.message.topology.Topology;
 import org.terracotta.message.topology.DefaultTopology;
 import org.terracotta.message.topology.TopologyManager;
-import org.terracotta.message.routing.Router;
-import org.terracotta.message.routing.RoundRobinRouter;
-import org.terracotta.message.routing.Route;
-import org.terracotta.util.jmx.ClusterEvents;
-import org.terracotta.util.jmx.SimpleListener;
+import org.terracotta.jmx.util.events.ClusterEvents;
 
 
-import javax.management.MBeanServer;
-import javax.management.MBeanServerFactory;
-import javax.management.ObjectName;
 import javax.management.MalformedObjectNameException;
-import java.lang.management.ManagementFactory;
-import java.util.List;
 
 /**
  * Created by vkatson
@@ -32,14 +23,19 @@ public class Consumer {
         Topology.Factory topologyFactory = new DefaultTopology.Factory(pipeFactory);
         Topology topology = TopologyManager.getInstance().<String, String>getOrCreateTopology("myTopologyName", topologyFactory);
 
-        SimpleListener listener = new MyListener();
+        ClusterEvents.ClusterListener listener = new ClusterEvents.ClusterListener();
         ClusterEvents.registerListener(listener);
+        listener.waitForRegistration();
+
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        System.out.println("Node ID: " + listener.getMyNodeId());
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
 
         Pipe<String> pipe = topology.getOrCreatePipeFor("myRoutingId");
 
         for (; ;) {
             String message = pipe.take();
-            System.out.println(message + " consumed on node: " + listener.getMyNodeId());
+            System.out.println(message + " consumed on node " + listener.getMyNodeId());
 //            System.out.println(message);
 }
     }

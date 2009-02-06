@@ -8,8 +8,6 @@ import org.terracotta.message.pipe.Pipe;
 import org.terracotta.message.routing.Route;
 import org.terracotta.message.routing.RoundRobinRouter;
 import org.terracotta.message.routing.Router;
-import org.terracotta.util.jmx.SimpleListener;
-import org.terracotta.util.jmx.ClusterEvents;
 
 /**
  * Created by vkatson
@@ -29,7 +27,7 @@ public class Sender {
         Pipe<String> pipe = topology.getOrCreatePipeFor("myRoutingId");
 
         for (int i = 0; i < 300; i++) {
-            pipe.put("message number: " + i);
+            pipe.put("message number " + i);
             Thread.sleep(50);
         }
         System.out.println("-------------------------sender end-------------------------");
