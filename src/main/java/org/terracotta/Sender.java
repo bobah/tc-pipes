@@ -19,29 +19,19 @@ import org.terracotta.util.jmx.ClusterEvents;
 public class Sender {
     public static void main(String[] args) throws InterruptedException {
 
+        System.out.println("-------------------------sender start-------------------------");
+
+        //Creating toppology
         Pipe.Factory pipeFactory = new BlockingQueueBasedPipe.Factory(10);
         Topology.Factory topologyFactory = new DefaultTopology.Factory(pipeFactory);
-
         Topology topology = TopologyManager.getInstance().<String, String>getOrCreateTopology("myTopologyName", topologyFactory);
-
-        //Router router = new RoundRobinRouter();
-
-        SimpleListener listener = new MyListener();
-        ClusterEvents.registerListener(listener);
-        System.out.println("*****************************************");
-        System.out.println("My node id is: " + listener.getMyNodeId());
-        System.out.println("*****************************************");
-
 
         Pipe<String> pipe = topology.getOrCreatePipeFor("myRoutingId");
 
-        for (int i = 0; i < 1000; i++) {
-/*
-            Route<String, String> route = topology.getRouteFor(router, null);
-            Pipe<String> pipe = topology.getPipeFor(route.getRoutingID());
-*/
+        for (int i = 0; i < 300; i++) {
             pipe.put("message number: " + i);
             Thread.sleep(50);
         }
+        System.out.println("-------------------------sender end-------------------------");
     }
 }

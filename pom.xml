@@ -26,22 +26,6 @@
             <version>1.2.0</version>
         </dependency>
 
-        <!--
-                <dependency>
-                    <groupId>org.terracotta.modules</groupId>
-                    <artifactId>tim-masterworker</artifactId>
-                    <version>1.2.0</version>
-                </dependency>
-        -->
-
-        <!--
-                <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring</artifactId>
-                    <version>2.5.6</version>
-                </dependency>
-        -->
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -68,16 +52,16 @@
                     <processes>
                         <process nodeName="node1"
                                  className="org.terracotta.Consumer" count="1"
-                                 jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node1 -Dtc.node-name=node1"/>
+                                 jvmargs="-Dcom.griddynamics.nodeName=node1 -Dtc.node-name=node1"/>
                         <process nodeName="node2"
                                  className="org.terracotta.Consumer" count="1"
-                                 jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node2 -Dtc.node-name=node2"/>
+                                 jvmargs="-Dcom.griddynamics.nodeName=node2 -Dtc.node-name=node2"/>
                         <process nodeName="node3"
                                  className="org.terracotta.Consumer" count="1"
-                                 jvmargs="-Xmx30m -Dcom.griddynamics.nodeName=node3  -Dtc.node-name=node3"/>
+                                 jvmargs="-Dcom.griddynamics.nodeName=node3  -Dtc.node-name=node3"/>
                         <process nodeName="sheduler"
-                                 className="org.terracotta.Sender -Dtc.node-name=sheduler" count="1"
-                                 jvmargs="-Xmx30m"/>
+                                 className="org.terracotta.Sender" count="1"
+                                 jvmargs="-Dtc.node-name=sender"/>
                     </processes>
                 </configuration>
             </plugin>

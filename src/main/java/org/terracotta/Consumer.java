@@ -26,29 +26,21 @@ import java.util.List;
  */
 public class Consumer {
     public static void main(String[] args) throws InterruptedException, MalformedObjectNameException {
-        System.out.println("-------------------------start-------------------------");
+
+        //Creating topology
         Pipe.Factory pipeFactory = new BlockingQueueBasedPipe.Factory(10);
         Topology.Factory topologyFactory = new DefaultTopology.Factory(pipeFactory);
-
         Topology topology = TopologyManager.getInstance().<String, String>getOrCreateTopology("myTopologyName", topologyFactory);
-/*
-        Router router = new RoundRobinRouter();
-
-        Route<String, String> route = topology.getRouteFor(router, null);
-        Pipe<String> pipe = topology.getPipeFor(route.getRoutingID());
-*/
 
         SimpleListener listener = new MyListener();
         ClusterEvents.registerListener(listener);
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("My node id is: " + listener.getMyNodeId());
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++");
 
         Pipe<String> pipe = topology.getOrCreatePipeFor("myRoutingId");
 
         for (; ;) {
             String message = pipe.take();
-            System.out.println(message);
-        }
+            System.out.println(message + " consumed on node: " + listener.getMyNodeId());
+//            System.out.println(message);
+}
     }
 }
